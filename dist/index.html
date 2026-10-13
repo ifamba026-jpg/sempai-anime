@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#130d28" />
+    <meta name="description" content="Sempaï Anime — découvre ton prochain anime selon ton humeur." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/sempai-anime-icon.jpg" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="assets/sempai-anime-icon.jpg" />
+    <title>Sempaï Anime — Ton prochain coup de cœur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="extras.css" />
+    <link rel="stylesheet" href="warmth.css" />
+    <link rel="stylesheet" href="anime-world.css" />
+    <link rel="stylesheet" href="features.css" />
+    <link rel="stylesheet" href="account.css" />
+  </head>
+  <body>
+    <div class="glow glow-one"></div><div class="glow glow-two"></div>
+    <header class="topbar">
+      <a class="brand" href="#accueil" aria-label="Sempaï Anime, accueil"><span class="brand-mark">S</span><span>Sempaï <b>Anime</b></span></a>
+      <nav><a href="#decouvrir">Découvrir</a><a href="#tendance">Tendances</a><a href="#extras">Fun zone</a><button id="watchlistButton" class="icon-button" aria-label="Ma liste">☰ <span>Ma liste</span></button><button id="favoritesButton" class="icon-button" aria-label="Mes favoris">♡ <span id="favoriteCount">0</span></button><button id="accountButton" class="icon-button account-button" aria-label="Mon compte">◉ <span id="accountLabel">Se connecter</span></button></nav>
+    </header>
+
+    <main id="accueil">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">✦ Ton guide anime personnel</p>
+          <h1>Ton prochain <em>coup de cœur</em> commence ici.</h1>
+          <p class="hero-text">Dis-nous ton humeur, découvre des anime qui te correspondent et garde ceux que tu veux regarder.</p>
+          <a class="primary-button" href="#decouvrir">Trouver mon anime <span>→</span></a>
+          <p class="microcopy">Recommandations alimentées par AniList · Gratuit</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div id="heroCharacters" class="hero-characters"></div>
+          <div class="orb orb-a"></div><div class="orb orb-b"></div>
+          <div class="hero-card card-one"><span>⚔</span><small>Action</small></div>
+          <div class="hero-card card-two"><span>✦</span><small>Aventure</small></div>
+          <div class="hero-card card-three"><span>♡</span><small>Romance</small></div>
+          <div class="spotlight"><span>?</span></div>
+        </div>
+      </section>
+
+      <section id="decouvrir" class="finder section-shell">
+        <div class="section-heading"><p class="eyebrow">01 — Découvrir</p><h2>Quelle est ton humeur ?</h2><p>Choisis une ambiance. Nous allons chercher ce qui te correspond.</p></div>
+        <div class="mood-grid" id="moodGrid">
+          <button data-genre="Action" data-label="Je veux de l'action"><span>⚡</span><b>Adrénaline</b><small>Combats & action</small></button>
+          <button data-genre="Romance" data-label="Je veux une romance"><span>♡</span><b>Émotions</b><small>Romance & douceur</small></button>
+          <button data-genre="Comedy" data-label="Je veux rire"><span>☻</span><b>Rire</b><small>Comédie & détente</small></button>
+          <button data-genre="Mystery" data-label="Je veux du suspense"><span>◈</span><b>Frissons</b><small>Mystère & suspense</small></button>
+          <button data-genre="Fantasy" data-label="Je veux m'évader"><span>✦</span><b>Évasion</b><small>Fantaisie & aventure</small></button>
+          <button data-genre="Drama" data-label="Je veux une histoire forte"><span>☾</span><b>Intense</b><small>Drame & profondeur</small></button>
+        </div>
+        <div class="search-row"><label for="searchInput">Ou cherche directement un titre</label><div><input id="searchInput" type="search" placeholder="Ex. Naruto, Solo Leveling, One Piece…" /><button id="searchButton">Rechercher</button></div></div>
+      </section>
+
+      <section id="tonight" class="tonight section-shell">
+        <div><p class="eyebrow">✦ Ton choix du soir</p><h2>Tu regardes quoi ce soir ?</h2><p>Choisis une ambiance et le temps que tu as. Sempaï te propose trois anime précis.</p></div>
+        <div class="tonight-controls"><div id="tonightMood" class="choice-pills"><button data-genre="Action" class="active">⚡ Action</button><button data-genre="Comedy">☻ Détente</button><button data-genre="Romance">♡ Romance</button><button data-genre="Mystery">◈ Suspense</button><button data-genre="Fantasy">✦ Évasion</button></div><div id="tonightLength" class="choice-pills"><button data-length="short" class="active">Court · ≤ 13 ép.</button><button data-length="medium">Moyen · ≤ 26 ép.</button><button data-length="any">Peu importe</button></div><button id="tonightButton" class="primary-button">Trouver mes 3 choix <span>→</span></button></div>
+        <div id="tonightResults" class="tonight-results" hidden></div>
+      </section>
+
+      <section id="tendance" class="results section-shell">
+        <div class="results-top"><div><p class="eyebrow">02 — Sélection</p><h2 id="resultsTitle">Les sorties de la saison</h2><p id="resultsSubtitle">Des anime en cours, renouvelés à chaque visite.</p></div><div class="results-actions"><button id="seasonButton" class="source-button season-button">Sorties de la saison ✦</button><button id="refreshSeasonButton" class="source-button">Autres sorties →</button><button id="jikanButton" class="source-button">Explorer MyAnimeList ↗</button><div id="loading" class="loading" hidden><i></i> Recherche en cours…</div></div></div>
+        <div id="animeGrid" class="anime-grid" aria-live="polite"></div>
+        <button id="loadMore" class="outline-button" hidden>Voir plus</button>
+      </section>
+
+      <section id="calendar" class="calendar section-shell"><div class="section-heading"><p class="eyebrow">03 — Calendrier</p><h2>Les épisodes de la semaine</h2><p>Garde l’œil sur les prochaines sorties et active les rappels sur les anime de ta liste.</p></div><div id="calendarDays" class="calendar-days" aria-live="polite"></div></section>
+
+      <section class="trace section-shell" id="trace">
+        <div><p class="eyebrow">03 — Scan d’image</p><h2>Tu reconnais cette scène ?</h2><p>Envoie une capture d’écran d’un épisode. Trace Moe essaie de retrouver l’anime, l’épisode et le moment précis.</p></div>
+        <div class="trace-action"><label class="upload-button" for="traceUpload">Choisir une capture <span>↑</span></label><input id="traceUpload" type="file" accept="image/jpeg,image/png,image/webp" hidden /><p id="traceHint">JPG, PNG ou WebP · Une scène d’anime, pas une illustration.</p><div id="traceResult" class="trace-result" hidden></div></div>
+      </section>
+
+      <section id="community" class="community section-shell"><div class="section-heading"><p class="eyebrow">05 — Communauté</p><h2>Le salon des otaku</h2><p>Partage une recommandation courte avec la communauté Sempaï.</p></div><form id="communityForm" class="community-form"><input id="communityAnime" maxlength="80" placeholder="Anime recommandé" required><input id="communityMessage" maxlength="180" placeholder="Pourquoi faut-il le voir ?" required><button class="small-button" type="submit">Publier</button></form><div id="communityFeed" class="community-feed"></div></section>
+
+      <section id="extras" class="extras section-shell">
+        <div class="section-heading"><p class="eyebrow">04 — Fun zone</p><h2>Une dose d’univers anime.</h2><p>Citations, anecdotes et une escapade dans les films Ghibli.</p></div>
+        <div class="extra-grid">
+          <article class="extra-card quote-card"><div class="api-label">AnimeChan · Citation</div><p id="quoteText">« Une citation inspirante t’attend. »</p><div id="quoteAuthor" class="extra-meta">Appuie sur le bouton pour la découvrir.</div><button id="quoteButton" class="small-button">Nouvelle citation</button></article>
+          <article class="extra-card fact-card"><div class="api-label">Anime Facts · Anecdote</div><p id="factText">Découvre une anecdote sur un anime au hasard.</p><div id="factAuthor" class="extra-meta">Le catalogue choisi est chargé au moment de la demande.</div><button id="factButton" class="small-button">Une anecdote</button></article>
+          <article class="extra-card ghibli-card"><div class="api-label">Studio Ghibli · Film</div><p id="ghibliTitle">Un voyage au cœur de Ghibli.</p><div id="ghibliMeta" class="extra-meta">Réalisateur, année, durée et note.</div><button id="ghibliButton" class="small-button">Tirer un film</button></article>
+        </div>
+      </section>
+    </main>
+
+    <footer><a class="brand" href="#accueil"><span class="brand-mark">S</span><span>Sempaï <b>Anime</b></span></a><p>Créé par Sempaï AI · L’IA au service de vos idées.</p><button id="installButton" class="install-button" hidden>Installer l’app ↓</button></footer>
+    <dialog id="animeDialog"><button id="closeDialog" class="dialog-close" aria-label="Fermer">×</button><div id="dialogContent"></div></dialog>
+    <dialog id="accountDialog"><button id="closeAccountDialog" class="dialog-close" aria-label="Fermer">×</button><div id="accountContent"></div></dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="supabase-config.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="app-v3.js"></script>
+    <script src="warmth.js"></script>
+    <script src="features.js"></script>
+    <script src="push.js"></script>
+  </body>
+</html>
