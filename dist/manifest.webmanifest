@@ -1,0 +1,10 @@
+{
+  "name":"Sempaï Anime",
+  "short_name":"Sempaï Anime",
+  "description":"Ton guide anime personnel en français.",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#130d28",
+  "theme_color":"#130d28",
+  "icons":[{"src":"assets/sempai-anime-icon.jpg","sizes":"1536x1536","type":"image/jpeg","purpose":"any maskable"}]
+}
