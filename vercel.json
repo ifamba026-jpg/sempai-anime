@@ -1,4 +1,7 @@
 {
   "outputDirectory": "dist",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/app/(.*)", "destination": "/index.html" }
+  ]
 }
