@@ -21,25 +21,32 @@ async function loadCalendar(){const target=document.querySelector('#calendarDays
 function setupTonight(){let genre='Action',length='short';tonightMood.onclick=e=>{const b=e.target.closest('button');if(!b)return;genre=b.dataset.genre;document.querySelectorAll('#tonightMood button').forEach(x=>x.classList.toggle('active',x===b))};tonightLength.onclick=e=>{const b=e.target.closest('button');if(!b)return;length=b.dataset.length;document.querySelectorAll('#tonightLength button').forEach(x=>x.classList.toggle('active',x===b))};tonightButton.onclick=async()=>{const b=tonightButton,out=tonightResults;b.disabled=true;b.textContent='Recherche…';try{const data=await gql(tonightQuery,{genre,episodes:{short:13,medium:26,any:9999}[length]}),p=(data.Page.media||[]).sort(()=>Math.random()-.5).slice(0,3);out.hidden=false;out.innerHTML=p.map(x=>`<article class="pick-card" data-pick-id="${x.id}">${x.coverImage?.large?`<img src="${safe(x.coverImage.large)}" alt="">`:''}<div><h3>${safe(nameOf(x))}</h3><p>${safe(genre)} · ${x.episodes||'?'} épisodes</p><p>★ ${x.averageScore?Math.round(x.averageScore/10)+'/10':'—'} · Un choix adapté à ton envie.</p></div></article>`).join('')}catch{toast('Les recommandations du soir sont indisponibles.')}finally{b.disabled=false;b.innerHTML='Trouver mes 3 choix <span>→</span>'}};tonightResults.onclick=e=>{const c=e.target.closest('[data-pick-id]');if(c)openEnriched(c.dataset.pickId)}}
 function setupInstall(){
   const prompt=document.querySelector('#installPrompt'),mainButton=document.querySelector('#installButton'),installNow=document.querySelector('#installNow'),installLater=document.querySelector('#installLater'),promptText=document.querySelector('#installPromptText'),triggers=[mainButton,...document.querySelectorAll('[data-install-trigger]')].filter(Boolean),dismissKey='sempai-anime-install-dismissed-until';
-  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
-  let deferred;
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),android=/android/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,inApp=/; wv\)|\bwv\b|FBAN|FBAV|Instagram|TikTok|ChatGPT/i.test(navigator.userAgent);
+  let deferred,guideVisible=false;
   const recentlyDismissed=()=>Date.now()<Number(localStorage.getItem(dismissKey)||0);
   const setVisible=value=>{prompt.hidden=!value;triggers.forEach(button=>button.hidden=!value)};
   const closeForLater=()=>{localStorage.setItem(dismissKey,String(Date.now()+7*24*60*60*1000));setVisible(false)};
+  const showGuide=message=>{guideVisible=true;promptText.textContent=message;installNow.disabled=false;installNow.textContent='J’ai compris';setVisible(true)};
+  const showAndroidGuide=()=>showGuide(inApp?'Pour installer : touche ⋮ en haut, puis « Ouvrir dans Chrome ». Dans Chrome, touche ⋮ puis « Installer l’application ».':'Pour installer : ouvre le menu ⋮ de Chrome, puis touche « Installer l’application ». Si l’option n’apparaît pas, actualise cette page puis réessaie.');
   const askToInstall=async()=>{
-    if(ios){promptText.textContent='Sur iPhone : touche Partager, puis « Sur l’écran d’accueil ». Sempaï Anime apparaîtra comme une application.';installNow.textContent='Voir les étapes';return}
-    if(!deferred)return;
-    deferred.prompt();
-    const choice=await deferred.userChoice;
-    if(choice.outcome==='accepted')setVisible(false);
-    deferred=null;
+    if(standalone){toast('Sempaï Anime est déjà installé sur cet appareil.');setVisible(false);return}
+    if(guideVisible){guideVisible=false;setVisible(false);return}
+    if(ios){showGuide('Sur iPhone : touche Partager, puis « Sur l’écran d’accueil ». Sempaï Anime apparaîtra comme une application.');return}
+    if(!deferred){showAndroidGuide();return}
+    try{
+      installNow.disabled=true;installNow.textContent='Ouverture…';
+      await deferred.prompt();
+      const choice=await deferred.userChoice;
+      deferred=null;
+      if(choice?.outcome==='accepted'){guideVisible=true;promptText.textContent='Installation demandée à Android. Confirme l’ajout, puis retrouve Sempaï Anime dans tes applications.';installNow.textContent='Fermer';toast('Demande d’installation envoyée à Android.')}else{guideVisible=true;promptText.textContent='Installation annulée. Tu peux réessayer à tout moment avec le bouton Installer.';installNow.textContent='Fermer';toast('Installation annulée.')}}catch{showAndroidGuide()}finally{installNow.disabled=false}
   };
   triggers.forEach(button=>button.addEventListener('click',askToInstall));
   installNow.addEventListener('click',askToInstall);
   installLater.addEventListener('click',closeForLater);
-  addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferred=event;if(!standalone&&!recentlyDismissed())setVisible(true)});
-  addEventListener('appinstalled',()=>{deferred=null;setVisible(false);localStorage.removeItem(dismissKey);toast('Sempaï Anime est installé ✦')});
+  addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferred=event;guideVisible=false;installNow.textContent='Installer';promptText.textContent='Une expérience plus rapide, même avec une connexion faible.';if(!standalone&&!recentlyDismissed())setVisible(true)});
+  addEventListener('appinstalled',()=>{deferred=null;guideVisible=false;setVisible(false);localStorage.removeItem(dismissKey);toast('Sempaï Anime est installé ✦')});
   if(ios&&!standalone&&!recentlyDismissed())setTimeout(()=>{promptText.textContent='Sur iPhone : touche Partager, puis « Sur l’écran d’accueil ».';setVisible(true)},900);
+  if(android&&!standalone&&!recentlyDismissed())setTimeout(()=>{if(!deferred&&prompt.hidden)showAndroidGuide()},1300);
   if('serviceWorker'in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
 }
 async function renderAccount(){const target=accountContent,current=await hasSession(),signup=authMode==='signup';accountLabel.textContent=current?.user?.email?current.user.email.split('@')[0]:'Mon compte';target.innerHTML=current?`<div class="auth-panel"><p class="eyebrow">Compte synchronisé</p><h2>Bonjour ✦</h2><p><b>${safe(current.user.email)}</b><br>Ta liste et ta progression sont sauvegardées sur ton compte.</p><form id="anilistImportForm"><label>Ton pseudo AniList (facultatif)<input id="aniListUsername" maxlength="50" placeholder="Ex. IsaacAnime"></label><button class="small-button">Importer ma liste AniList</button></form><button id="signOutButton" class="text-button">Se déconnecter</button><p class="link-note">Les rappels sont enregistrés ; les notifications hors app demandent encore l’activation du push.</p></div>`:`<div class="auth-panel"><p class="eyebrow">${signup?'Nouveau compte Sempaï':'Compte Sempaï'}</p><h2>${signup?'Crée ton compte gratuitement.':'Retrouve ta liste partout.'}</h2><p>${signup?'Commence ici : tes anime, ta progression et tes rappels seront sauvegardés sur ton compte.':'Déjà membre ? Connecte-toi pour retrouver ta progression, tes rappels et tes favoris.'}</p><form id="authForm"><label>E-mail<input id="authEmail" type="email" inputmode="email" autocomplete="email" placeholder="exemple@email.com" required></label><label>Mot de passe<input id="authPassword" type="password" autocomplete="${signup?'new-password':'current-password'}" minlength="6" placeholder="Au moins 6 caractères" required></label>${signup?'<label>Confirmer le mot de passe<input id="authPasswordConfirm" type="password" autocomplete="new-password" minlength="6" placeholder="Répète ton mot de passe" required></label>':''}<button class="small-button">${signup?'Créer mon compte':'Se connecter'}</button><button id="toggleAuthMode" class="text-button" type="button">${signup?'J’ai déjà un compte':'Je n’ai pas encore de compte'}</button></form></div>`}
