@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#130d28" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="description" content="Sempaï Anime — découvre ton prochain anime selon ton humeur." />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="assets/sempai-anime-icon.jpg" type="image/jpeg" />
@@ -18,22 +20,26 @@
     <link rel="stylesheet" href="anime-world.css" />
     <link rel="stylesheet" href="features.css" />
     <link rel="stylesheet" href="account.css" />
+    <link rel="stylesheet" href="refonte.css" />
   </head>
   <body>
     <div class="glow glow-one"></div><div class="glow glow-two"></div>
     <header class="topbar">
       <a class="brand" href="#accueil" aria-label="Sempaï Anime, accueil"><span class="brand-mark">S</span><span>Sempaï <b>Anime</b></span></a>
-      <nav><a href="#decouvrir">Découvrir</a><a href="#tendance">Tendances</a><a href="#extras">Fun zone</a><button id="watchlistButton" class="icon-button" aria-label="Ma liste">☰ <span>Ma liste</span></button><button id="favoritesButton" class="icon-button" aria-label="Mes favoris">♡ <span id="favoriteCount">0</span></button><button id="accountButton" class="icon-button account-button" aria-label="Mon compte">◉ <span id="accountLabel">Se connecter</span></button></nav>
+      <nav><a href="#decouvrir">Découvrir</a><a href="#tendance">Tendances</a><a href="#calendar">Calendrier</a><a href="#extras">Fun zone</a><button id="installButton" class="install-button top-install" hidden>↓ Installer</button><button id="watchlistButton" class="icon-button" aria-label="Ma liste">☰ <span>Ma liste</span></button><button id="favoritesButton" class="icon-button" aria-label="Mes favoris">♡ <span id="favoriteCount">0</span></button><button id="accountButton" class="icon-button account-button" aria-label="Mon compte">◉ <span id="accountLabel">Se connecter</span></button></nav>
     </header>
 
     <main id="accueil">
       <section class="hero">
+        <div class="hero-scene" aria-hidden="true"></div>
+        <figure class="hero-guide" aria-hidden="true"><img src="assets/isaac-anime-guide-cyber-v1.png" alt="" /><figcaption>ISAAC · GUIDE OTAKU</figcaption></figure>
         <div class="hero-copy">
           <p class="eyebrow">✦ Ton guide anime personnel</p>
           <h1>Ton prochain <em>coup de cœur</em> commence ici.</h1>
           <p class="hero-text">Dis-nous ton humeur, découvre des anime qui te correspondent et garde ceux que tu veux regarder.</p>
           <a class="primary-button" href="#decouvrir">Trouver mon anime <span>→</span></a>
           <p class="microcopy">Recommandations alimentées par AniList · Gratuit</p>
+          <div class="hero-stats" aria-label="Points forts de Sempaï Anime"><span><b>✦</b> Choix selon ton humeur</span><span><b>◷</b> Suivi de progression</span></div>
         </div>
         <div class="hero-art" aria-hidden="true">
           <div id="heroCharacters" class="hero-characters"></div>
@@ -61,6 +67,7 @@
       <section id="tonight" class="tonight section-shell">
         <div><p class="eyebrow">✦ Ton choix du soir</p><h2>Tu regardes quoi ce soir ?</h2><p>Choisis une ambiance et le temps que tu as. Sempaï te propose trois anime précis.</p></div>
         <div class="tonight-controls"><div id="tonightMood" class="choice-pills"><button data-genre="Action" class="active">⚡ Action</button><button data-genre="Comedy">☻ Détente</button><button data-genre="Romance">♡ Romance</button><button data-genre="Mystery">◈ Suspense</button><button data-genre="Fantasy">✦ Évasion</button></div><div id="tonightLength" class="choice-pills"><button data-length="short" class="active">Court · ≤ 13 ép.</button><button data-length="medium">Moyen · ≤ 26 ép.</button><button data-length="any">Peu importe</button></div><button id="tonightButton" class="primary-button">Trouver mes 3 choix <span>→</span></button></div>
+        <figure class="tonight-guide" aria-hidden="true"><img src="assets/isaac-anime-guide-tonight-v1.png" alt="" /><figcaption>LE GUIDE DU SOIR</figcaption></figure>
         <div id="tonightResults" class="tonight-results" hidden></div>
       </section>
 
@@ -89,7 +96,13 @@
       </section>
     </main>
 
-    <footer><a class="brand" href="#accueil"><span class="brand-mark">S</span><span>Sempaï <b>Anime</b></span></a><p>Créé par Sempaï AI · L’IA au service de vos idées.</p><button id="installButton" class="install-button" hidden>Installer l’app ↓</button></footer>
+    <footer><a class="brand" href="#accueil"><span class="brand-mark">S</span><span>Sempaï <b>Anime</b></span></a><p>Créé par Sempaï AI · L’IA au service de vos idées.</p><button class="install-button footer-install" data-install-trigger hidden>Installer l’app ↓</button></footer>
+    <aside id="installPrompt" class="install-prompt" hidden aria-live="polite" aria-label="Installer Sempaï Anime">
+      <img src="assets/sempai-anime-icon.jpg" alt="Icône Sempaï Anime" />
+      <div><p class="eyebrow">Sempaï Anime sur ton écran</p><strong>Installe l’app pour y accéder en un geste.</strong><span id="installPromptText">Une expérience plus rapide, même avec une connexion faible.</span></div>
+      <div class="install-prompt-actions"><button id="installNow" class="small-button" type="button">Installer</button><button id="installLater" class="text-button" type="button">Plus tard</button></div>
+    </aside>
+    <nav class="mobile-nav" aria-label="Navigation mobile"><a href="#accueil">⌂<span>Accueil</span></a><a href="#decouvrir">◈<span>Découvrir</span></a><a href="#tendance">✦<span>Tendances</span></a><button data-mobile-list type="button">☰<span>Ma liste</span></button><button data-mobile-account type="button">◉<span>Compte</span></button></nav>
     <dialog id="animeDialog"><button id="closeDialog" class="dialog-close" aria-label="Fermer">×</button><div id="dialogContent"></div></dialog>
     <dialog id="accountDialog"><button id="closeAccountDialog" class="dialog-close" aria-label="Fermer">×</button><div id="accountContent"></div></dialog>
     <div id="toast" role="status" aria-live="polite"></div>
