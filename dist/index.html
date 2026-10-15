@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="features.css" />
     <link rel="stylesheet" href="account.css" />
     <link rel="stylesheet" href="refonte.css" />
+    <link rel="stylesheet" href="home-trends.css" />
   </head>
   <body>
     <div class="glow glow-one"></div><div class="glow glow-two"></div>
@@ -49,6 +50,12 @@
           <div class="hero-card card-three"><span>♡</span><small>Romance</small></div>
           <div class="spotlight"><span>?</span></div>
         </div>
+      </section>
+
+      <section id="homeTrends" class="home-trends" aria-labelledby="homeTrendsTitle">
+        <div class="home-trends-head"><div><p class="eyebrow">✦ À suivre maintenant</p><h2 id="homeTrendsTitle">Les tendances qui font parler.</h2><p>Une sélection vivante dès l’ouverture : les anime les plus regardés, les nouveautés et les univers à ne pas rater.</p></div><a class="home-trends-link" href="#tendance">Voir toutes les tendances <span>→</span></a></div>
+        <div id="homeTrendGrid" class="home-trend-grid" aria-live="polite"><p class="home-trend-loading">Recherche des tendances anime…</p></div>
+        <div class="home-trend-themes" aria-label="Explorer par ambiance"><a href="#decouvrir" data-home-genre="Action">⚔ Action</a><a href="#decouvrir" data-home-genre="Fantasy">✦ Fantaisie</a><a href="#decouvrir" data-home-genre="Romance">♡ Romance</a><a href="#decouvrir" data-home-genre="Mystery">◈ Mystère</a><a href="#decouvrir" data-home-genre="Comedy">☻ Détente</a></div>
       </section>
 
       <section id="decouvrir" class="finder section-shell">
@@ -109,6 +116,7 @@
     <script src="supabase-config.js"></script>
     <script src="supabase-client.js"></script>
     <script src="app-v3.js"></script>
+    <script src="home-trends.js"></script>
     <script src="warmth.js"></script>
     <script src="features.js"></script>
     <script src="push.js"></script>
