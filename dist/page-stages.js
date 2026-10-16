@@ -10,7 +10,7 @@
     list:{eyebrow:'Ta collection',title:'Tes anime, ton rythme.',text:'Retrouve tes envies, tes progrès et les rappels que tu as choisis.',tag:'Bibliothèque personnelle',art:'list'},
     account:{eyebrow:'Compte Sempaï',title:'Ton espace anime.',text:'Gère ta synchronisation, tes préférences et tes notifications depuis un seul endroit.',tag:'Données synchronisées',art:'account'}
   };
-  const route=()=>({decouvrir:'discover',tendances:'trends',calendrier:'calendar',explorer:'explore','ma-liste':'list',compte:'account'})[location.hash.slice(1)]||'home';
+  const route=()=>({accueil:'home',decouvrir:'discover',tendance:'trends',tendances:'trends',calendar:'calendar',calendrier:'calendar',extras:'explore',explorer:'explore','ma-liste':'list',compte:'account'})[location.hash.slice(1)]||'home';
   function render(){
     const r=route(),data=copy[r]; document.body.dataset.route=r;
     if(!data){stage.hidden=true;stage.innerHTML='';return}
